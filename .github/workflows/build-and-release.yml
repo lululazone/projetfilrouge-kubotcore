@@ -36,6 +36,19 @@ jobs:
       - name: Display version
         run: echo "Project version is ${{ env.VERSION }}"
 
+      - name: List target directory
+        run: ls -la target
+
+      - name: Verify JAR file exists
+        id: verify_jar
+        run: |
+          JAR_FILE=$(ls target/*.jar | head -n 1)
+          if [ -z "$JAR_FILE" ]; then
+            echo "No JAR file found in target directory"
+            exit 1
+          fi
+          echo "JAR_FILE=$JAR_FILE" >> $GITHUB_ENV
+
       - name: Create GitHub Release
         id: create_release
         uses: actions/create-release@v1
@@ -53,6 +66,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: target/*.jar
+          asset_path: ${{ env.JAR_FILE }}
           asset_name: my-app-${{ env.VERSION }}.jar
           asset_content_type: application/java-archive
