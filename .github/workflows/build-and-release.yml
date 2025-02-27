@@ -33,6 +33,9 @@ jobs:
         id: get_version
         run: echo "VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV
 
+      - name: Display version
+        run: echo "Project version is ${{ env.VERSION }}"
+
       - name: Delete existing tag if it exists
         run: |
           if git rev-parse v${{ env.VERSION }} >/dev/null 2>&1; then
@@ -46,6 +49,9 @@ jobs:
           git config --global user.email "github-actions@github.com"
           git tag v${{ env.VERSION }}
           git push origin v${{ env.VERSION }}
+
+      - name: Verify tag creation
+        run: git rev-parse v${{ env.VERSION }}
 
       - name: Create GitHub Release
         id: create_release
@@ -65,4 +71,3 @@ jobs:
             target/*.jar
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          
