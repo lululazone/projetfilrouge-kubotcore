@@ -61,6 +61,8 @@ jobs:
       - name: Upload JAR to Release
         uses: softprops/action-gh-release@v2
         with:
-          files: target/core-${{ env.VERSION }}.jar
+          files: |
+            target/*.jar
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
