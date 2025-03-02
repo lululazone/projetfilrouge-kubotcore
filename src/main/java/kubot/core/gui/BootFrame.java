@@ -15,8 +15,7 @@ public class BootFrame extends JPanel{
 		setBackground(new Color(0,0,0));
         setLayout(new BorderLayout());
         // add the image label
-        ImageIcon ii = new ImageIcon(this.getClass().getResource(
-                "kubotboot.gif"));
+        ImageIcon ii = new ImageIcon(this.getClass().getClassLoader().getResource("images/kubotboot.gif"));
         
         
         JLabel imageLabel = new JLabel(ii,SwingConstants.CENTER);

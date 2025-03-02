@@ -3,9 +3,24 @@ package kubot.core.gui;
 import java.awt.Color;
 import java.awt.Font;
 
-public class Theme {
+import kubot.core.utils.PropertiesLoader;
 
-	static Color backgroundColor = new Color(0,0,0);
+
+public class Theme {
+	
+	PropertiesLoader props;
+	
+	public Theme(PropertiesLoader props) {
+		this.props = props;
+	}
+	
+	public Color getBackgroundColor() {
+		return props.getBackgroundColor();
+	}
+	
+	public Color getFontColor() {
+		return props.getFontColor();
+	}
 	
 
 }

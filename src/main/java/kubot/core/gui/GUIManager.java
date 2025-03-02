@@ -21,12 +21,19 @@ public class GUIManager extends JFrame{
 	private JPanel mainPanel;
 	private PropertiesLoader props;
 	private String firstScreen;
+	private Theme theme;
 	
 	public GUIManager(PropertiesLoader props) throws IOException {
 		this.props = props;
+		
+		if(!this.props.getDebug()) {
+			enableBluetooth();			
+		}
+		theme = new Theme(props);
 		setTitle("Kubot - Interface Graphique");
-        setSize(800, 480);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setUndecorated(true);
+		setExtendedState(JFrame.MAXIMIZED_BOTH);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setBackground(new Color(0,0,0));
         
@@ -39,11 +46,21 @@ public class GUIManager extends JFrame{
         add(mainPanel);
         setVisible(true);
 
-        // Simuler un chargement de 3 secondes avant de passer à la vue principale
-        new Timer(3000, e -> switchScreen(firstScreen)).start();
+        
+        new Timer(props.getBootDelay()*1000, e -> switchScreen(firstScreen)).start();
+        
+        
+        
+        
 	}
 	
 	
+
+	private void enableBluetooth() throws IOException {
+		Process p = Runtime.getRuntime().exec("sudo systemctl enable bluetooth.service");
+	}
+
+
 
 	private void setupFrames() {
 		BootFrame bootFrame = new BootFrame(this);
@@ -68,6 +85,14 @@ public class GUIManager extends JFrame{
 	public void switchScreen(String dest) {
         cardLayout.show(mainPanel, dest);
     }
+	
+	public Theme getTheme() {
+		return theme;
+	}
+	
+	public PropertiesLoader getProps() {
+		return this.props;
+	}
 
     
 
